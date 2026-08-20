@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 streamlit>=1.35
 tensorflow>=2.15
 numpy>=1.24
 pandas>=2.0
+=======
+streamlit>=1.35
+tensorflow>=2.15
+numpy>=1.24
+pandas>=2.0
+>>>>>>> d2d00eb93c1bfae679456e0d88680c0ac6f2a87b
