@@ -75,7 +75,7 @@ if uploaded_file is not None:
                 display_results,
                 use_container_width=True,
                 hide_index=True,
-                height=min(700, 120 + len(display_results) * 220),
+                height=min(700, 55 + len(display_results) * 220),
                 row_height=220,
                 column_config={
                     "query": st.column_config.TextColumn("Query", width="medium"),
