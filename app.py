@@ -73,4 +73,3 @@ if uploaded_file is not None:
                 file_name="customer_support_responses.csv",
                 mime="text/csv",
             )
-uploaded_file = st.file_uploader("Upload queries", type=["txt", "csv"])
