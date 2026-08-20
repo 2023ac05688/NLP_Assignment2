@@ -1,0 +1,13 @@
+{
+    "conversation_type": "single-turn",
+    "vocab_size": 10863,
+    "max_query_length": 13,
+    "max_response_length": 213,
+    "pad_token_id": 0,
+    "unk_token_id": 1,
+    "sos_token_id": 17,
+    "eos_token_id": 18,
+    "train_records": 21497,
+    "validation_records": 2687,
+    "test_records": 2688
+}
