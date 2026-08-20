@@ -85,16 +85,28 @@ class ResponseGenerator:
         encoder_prediction = self.encoder.predict(self._encode(query), verbose=0)
         if not isinstance(encoder_prediction, (list, tuple)) or len(encoder_prediction) < 2:
             raise RuntimeError("The encoder must return hidden and cell states.")
-        hidden_state, cell_state = encoder_prediction[-2:]
+        if len(encoder_prediction) >= 3:
+            encoder_outputs, hidden_state, cell_state = encoder_prediction[-3:]
+        else:
+            encoder_outputs = None
+            hidden_state, cell_state = encoder_prediction[-2:]
         token_id = self.sos_id
         words: list[str] = []
 
         for _ in range(self.max_response_len):
             decoder_input = np.array([[token_id]], dtype="int32")
+            decoder_inputs = [decoder_input, hidden_state, cell_state]
+            if encoder_outputs is not None:
+                decoder_inputs.append(encoder_outputs)
             prediction = self.decoder.predict(
-                [decoder_input, hidden_state, cell_state], verbose=0
+                decoder_inputs, verbose=0
             )
-            prediction_array = self._first_output(prediction)
+            if isinstance(prediction, (list, tuple)):
+                prediction_array = np.asarray(prediction[0])
+                if len(prediction) >= 3:
+                    hidden_state, cell_state = prediction[-2:]
+            else:
+                prediction_array = np.asarray(prediction)
             if prediction_array.ndim == 3:
                 prediction_array = prediction_array[:, -1, :]
             token_id = int(np.argmax(prediction_array[0]))
