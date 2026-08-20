@@ -1,4 +1,5 @@
 from pathlib import Path
+import textwrap
 
 import pandas as pd
 import streamlit as st
@@ -66,7 +67,23 @@ if uploaded_file is not None:
             with st.spinner("Generating responses..."):
                 responses = [generator.generate(query) for query in queries]
             results = pd.DataFrame({"query": queries, "response": responses})
-            st.dataframe(results, use_container_width=True, hide_index=True)
+            display_results = results.copy()
+            display_results["response"] = display_results["response"].map(
+                lambda response: textwrap.fill(response, width=75)
+            )
+            st.dataframe(
+                display_results,
+                use_container_width=True,
+                hide_index=True,
+                height=min(700, 120 + len(display_results) * 220),
+                row_height=220,
+                column_config={
+                    "query": st.column_config.TextColumn("Query", width="medium"),
+                    "response": st.column_config.TextColumn(
+                        "Generated response", width="large"
+                    ),
+                },
+            )
             st.download_button(
                 "Download responses as CSV",
                 data=results.to_csv(index=False).encode("utf-8"),
